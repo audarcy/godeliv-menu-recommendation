@@ -1,0 +1,61 @@
+{
+    "user": [
+        {
+            "id_user": 1,
+            "nama_user": "John Doe",
+            "jenis_kelamin": "Laki-laki",
+            "umur_user": 30
+        },
+        {
+            "id_user": 2,
+            "nama_user": "Susi Susanti",
+            "jenis_kelamin": "Perempuan",
+            "umur_user": 32
+        },
+        {
+            "id_user": 3,
+            "nama_user": "Michael Smith",
+            "jenis_kelamin": "Laki-Laki",
+            "umur_user": 40
+        }
+    ],
+    "menu": [
+        {
+            "id_menu": 1,
+            "nama_menu": "batagor",
+            "kalori": 500
+        },
+        {
+            "id_menu": 2,
+            "nama_menu": "Steamed Vegetables",
+            "kalori": 250
+        },
+        {
+            "id_menu": 3,
+            "nama_menu": "Protein Smoothie",
+            "kalori": 200
+        },
+        {
+            "id_menu": 4,
+            "nama_menu": "Oatmeal",
+            "kalori": 250
+        },
+        {
+            "id_menu": 5,
+            "nama_menu": "steak",
+            "kalori": 600
+        }
+    ],
+    "signin_user": [
+        {
+            "id": 1,
+            "username": "budiman",
+            "pass_hash": "$2b$12$1bJLZBwbiWS5qbvVmjM4xezWHHJpHtzZ7U7lxtni59DFC659Q5CH2"
+        },
+        {
+            "id": 2,
+            "username": "odre",
+            "pass_hash": "$2b$12$BgjONIDW89qtr17PkrFBjOoEMUfE0pQ4iVGs7OBar8cpdK7hFNFia"
+        }
+    ]
+}
