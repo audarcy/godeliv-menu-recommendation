@@ -7,7 +7,7 @@ import uvicorn
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.hash import bcrypt
 
-with open('data.json', 'r') as file:
+with open('database.json', 'r') as file:
     data = json.load(file)
     
 auth = APIRouter(tags=["auth"],)
@@ -48,7 +48,7 @@ class signin_user:
         return bcrypt.verify(password, self.pass_hash)
 
 def write_data(data):
-    with open("data.json", "w") as write_file:
+    with open("database.json", "w") as write_file:
         json.dump(data, write_file, indent=4)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
@@ -130,7 +130,7 @@ async def update_menu(id_menu: int, nama_menu: str, kalori: int, target: str, us
             menu["nama_menu"] = nama_menu
             menu["kalori"] = kalori
             menu["target"] = target
-            with open('data.json', 'w') as outfile:
+            with open('database.json', 'w') as outfile:
                 json.dump(data, outfile, indent=4)
             return {"message": "Menu updated successfully"}
     return {"error": "Menu not found"}
@@ -141,7 +141,7 @@ async def delete_menu(id_menu: int, user: signin_user = Depends(get_current_user
     for menu in data["menu"]:
         if menu["id_menu"] == id_menu:
             data["menu"].remove(menu)
-            with open('data.json', 'w') as outfile:
+            with open('database.json', 'w') as outfile:
                 json.dump(data, outfile, indent=4)
             return {"message": "Menu deleted successfully"}
     return {"error": "Menu not found"}
@@ -154,7 +154,7 @@ async def add_menu(id_menu: int, nama_menu: str, kalori: int, user: signin_user 
         raise HTTPException(status_code=400, detail="ID already exists")
     menu_baru = {"id_menu": id_menu, "nama_menu": nama_menu, "kalori": kalori}
     data["menu"].append(menu_baru)
-    with open('data.json', 'w') as outfile:
+    with open('database.json', 'w') as outfile:
         json.dump(data, outfile, indent=4)
     return {"message": "Menu berhasil ditambahkan"}
 
@@ -166,36 +166,62 @@ async def add_user(id_user: int, nama_user: str, jenis_kelamin: str, umur_user: 
         raise HTTPException(status_code=400, detail="ID already exists")
     new_user = {"id_user": id_user, "nama_user": nama_user, "jenis_kelamin": jenis_kelamin, "umur_user": umur_user}
     data["user"].append(new_user)
-    with open('data.json', 'w') as outfile:
+    with open('database.json', 'w') as outfile:
         json.dump(data, outfile, indent=4)
     return {"message": "User berhasil ditambahkan"}
 
+# Mendapatkan rekomendasi menu berdasarkan target kalori pengguna
 @recommendation_router.get("/get_recommendation")
-async def get_recommendation(user_id: int, current_user: signin_user = Depends(get_current_user)):
+async def get_recommendation(id_user: int, current_user: signin_user = Depends(get_current_user)):
     # Find user details
-    user = next((u for u in data['user'] if u['id_user'] == user_id), None)
+    user_details = next((u for u in data['user'] if u['id_user'] == id_user), None)
+
+    if user_details is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Get the user's target calorie intake
+    target_calories = user_details.get('target_kalori', None)
+
+    if not target_calories:
+        raise HTTPException(status_code=400, detail="User's target calories not specified")
+
+    # Convert target calories to an integer
+    target_calories = int(target_calories)
+
+    # Filter meals based on target calories
+    recommended_meals = [meal for meal in data["menu"] if meal['kalori'] <= target_calories]
+
+    return {"user": user_details, "recommended_meals": recommended_meals}
+
+# Mendapatkan rekomendasi menu berdasarkan standar umur dan jenis kelamin
+@recommendation_router.get("/get_standard_recommendation")
+async def get_standard_recommendation(id_user: int, current_user: signin_user = Depends(get_current_user)):
+    # Find user details
+    user = next((u for u in data['user'] if u['id_user'] == id_user), None)
 
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
+    
     # Basic recommendation logic based on gender and age
     gender = user['jenis_kelamin'].lower()
     age = user['umur_user']
 
     # Example recommendation logic: Recommend a meal with kalori <= 300 for females under 35, and <= 500 for males under 35
     if gender == 'perempuan' and age < 35:
-        recommended_meals = [meal for meal in menu if meal['kalori'] <= 300]
+        recommended_meals = [meal for meal in data["menu"] if meal['kalori'] <= 300]
     elif gender == 'laki-laki' and age < 35:
-        recommended_meals = [meal for meal in menu if meal['kalori'] <= 500]
+        recommended_meals = [meal for meal in data["menu"] if meal['kalori'] <= 500]
     else:
         # Default recommendation for other cases
-        recommended_meals = menu
+        recommended_meals = data["menu"]
 
     return {"user": user, "recommended_meals": recommended_meals}
+
 
 app.include_router(auth)
 app.include_router(menu)
 app.include_router(user)
 app.include_router(recommendation_router)
 
-# if __name__	=="__main__":	
-#     uvicorn.run("main:app",	host="localhost",port=8006, reload=True)
+if __name__	=="__main__":	
+    uvicorn.run("main:app",	host="localhost",port=8000, reload=True)
