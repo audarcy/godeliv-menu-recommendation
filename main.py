@@ -179,7 +179,7 @@ async def get_recommendation(id_user: int, current_user: signin_user = Depends(g
     if user_details is None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Get the user's target calorie intake
+    # Get target kalori user
     target_calories = user_details.get('target_kalori', None)
 
     if not target_calories:
@@ -202,11 +202,11 @@ async def get_standard_recommendation(id_user: int, current_user: signin_user = 
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Basic recommendation logic based on gender and age
+    # Recommendation logic berdasarkan jenis kelamin dan usia
     gender = user['jenis_kelamin'].lower()
     age = user['umur_user']
 
-    # Example recommendation logic: Recommend a meal with kalori <= 300 for females under 35, and <= 500 for males under 35
+    # Rekomendasi menu dengan kalori <=300 untuk perempuan dibawah 35 tahun dan <= 500 untuk laki-laki dibawah 35 tahun
     if gender == 'perempuan' and age < 35:
         recommended_meals = [meal for meal in data["menu"] if meal['kalori'] <= 300]
     elif gender == 'laki-laki' and age < 35:
