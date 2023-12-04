@@ -222,5 +222,5 @@ app.include_router(menu)
 app.include_router(user)
 app.include_router(recommendation_router)
 
-# if __name__	=="__main__":	
-#     uvicorn.run("main:app",	host="localhost",port=8001, reload=True)
+if __name__ == '__main__':
+    uvicorn.run('main:app', host='0.0.0.0', port=8001, reload=True)
