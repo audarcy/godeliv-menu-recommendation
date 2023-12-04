@@ -160,11 +160,11 @@ async def add_menu(id_menu: int, nama_menu: str, kalori: int, user: signin_user 
 
 
 @user.post("/add_user")
-async def add_user(id_user: int, nama_user: str, jenis_kelamin: str, umur_user: int, user: signin_user = Depends(get_current_user)):
+async def add_user(id_user: int, nama_user: str, jenis_kelamin: str, umur_user: int, target_kalori:int, user: signin_user = Depends(get_current_user)):
     user_id = {user["id_user"] for user in data["user"]}
     if id_user in user_id:
         raise HTTPException(status_code=400, detail="ID already exists")
-    new_user = {"id_user": id_user, "nama_user": nama_user, "jenis_kelamin": jenis_kelamin, "umur_user": umur_user}
+    new_user = {"id_user": id_user, "nama_user": nama_user, "jenis_kelamin": jenis_kelamin, "umur_user": umur_user, "target_kalori": target_kalori}
     data["user"].append(new_user)
     with open('database.json', 'w') as outfile:
         json.dump(data, outfile, indent=4)
@@ -218,10 +218,12 @@ async def get_standard_recommendation(id_user: int, current_user: signin_user = 
     return {"user": user, "recommended_meals": recommended_meals}
 
 
+
+
 app.include_router(auth)
 app.include_router(menu)
 app.include_router(user)
 app.include_router(recommendation_router)
 
 if __name__	=="__main__":	
-    uvicorn.run("main:app",	host="localhost",port=8000, reload=True)
+    uvicorn.run("main:app",	host="localhost",port=8001, reload=True)
