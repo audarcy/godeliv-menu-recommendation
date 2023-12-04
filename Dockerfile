@@ -29,6 +29,6 @@ RUN apk update && apk add python3-dev \
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-EXPOSE 8001
+EXPOSE 8000
 
 CMD [ "python", "main.py" ]
