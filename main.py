@@ -217,13 +217,10 @@ async def get_standard_recommendation(id_user: int, current_user: signin_user = 
 
     return {"user": user, "recommended_meals": recommended_meals}
 
-
-
-
 app.include_router(auth)
 app.include_router(menu)
 app.include_router(user)
 app.include_router(recommendation_router)
 
-if __name__	=="__main__":	
-    uvicorn.run("main:app",	host="localhost",port=8001, reload=True)
+# if __name__	=="__main__":	
+#     uvicorn.run("main:app",	host="localhost",port=8001, reload=True)

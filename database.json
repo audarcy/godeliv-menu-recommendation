@@ -41,49 +41,49 @@
             "id_menu": 1,
             "nama_menu": "Caesar Salad",
             "kalori": 500,
-            "stok": 10
+            "harga":90000
         },
         {
             "id_menu": 2,
             "nama_menu": "Steamed Vegetables",
             "kalori": 250,
-            "stok": 20
+            "harga":45000
         },
         {
             "id_menu": 3,
             "nama_menu": "Protein Smoothie",
             "kalori": 200,
-            "stok": 15
+            "harga":67000
         },
         {
             "id_menu": 4,
             "nama_menu": "Oatmeal",
             "kalori": 300,
-            "stok": 30
+            "harga":80000
         },
         {
             "id_menu": 5,
             "nama_menu": "Steak",
             "kalori": 600,
-            "stok": 27
+            "harga":77000
         },
         {
             "id_menu": 6,
             "nama_menu": "Burrito",
             "kalori": 450,
-            "stok": 13
+            "harga":48000
         },
         {
             "id_menu": 7,
             "nama_menu": "Potato and Cheese",
             "kalori": 700,
-            "stok": 16
+            "harga":56000
         },
         {
             "id_menu": 8,
             "nama_menu": "Steamed Bun",
             "kalori": 340,
-            "stok": 22
+            "harga":23000
         }
     ],
     "signin_user": [
